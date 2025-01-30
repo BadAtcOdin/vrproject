@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class Step : MonoBehaviour
 {
     public int stepIndex; // Step position (1-16)
@@ -26,3 +27,4 @@ public class Step : MonoBehaviour
         UpdateVisual();
     }
 }
+
