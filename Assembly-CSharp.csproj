@@ -43,6 +43,7 @@
      <Compile Include="Assets\VRDAW Scripts\AudioManager.cs" />
      <Compile Include="Assets\VRDAW Scripts\KeyHandler.cs" />
      <Compile Include="Assets\VRDAW Scripts\Channel.cs" />
+     <Compile Include="Assets\VRDAW Scripts\PadOnOff.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

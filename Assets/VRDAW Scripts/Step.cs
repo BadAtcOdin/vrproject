@@ -12,19 +12,15 @@ public class Step : MonoBehaviour
     void Start()
     {
         rend = GetComponent<Renderer>();
-        UpdateVisual();
+        
     }
 
-    void UpdateVisual()
-    {
-        // Change color based on activation state
-        rend.material.color = isActive ? Color.green : Color.red;
-    }
 
     public void ToggleStep()
     {
         isActive = !isActive;
-        UpdateVisual();
+        Debug.Log("Pad is Toggled") ; 
+        
     }
 }
 
