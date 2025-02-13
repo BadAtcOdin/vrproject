@@ -4,15 +4,43 @@ using UnityEngine;
 
 public class Channel : MonoBehaviour
 {
-    public GameObject stepPrefab;  // Prefab for the Step object
-    public int stepCount = 16;     // Number of steps
-    public float stepSpacing = 0.25f;  // Distance between each step
-    public string name = string.Empty;
+    public GameObject stepPrefab;
+    public int stepCount = 16;
+    public float stepSpacing = 0.25f;
+    public string channelName; // "Kick", "Snare", etc.
+
+    public List<Step> steps = new List<Step>();
+    public int[] activeSteps = new int[16];
+
+    [SerializeField] private GameObject audioSourcePrefab; // Prefab with AudioSource
+    [SerializeField] private AudioClip drumSample; // Assign in the Inspector
 
     void Start()
     {
         SetupSteps();
+
+        // Initialize activeSteps array
+        for (int i = 0; i < 16; i++)
+        {
+            activeSteps[i] = 0;
+        }
     }
+
+    public void UpdateStepState(int index, bool isActive)
+    {
+        activeSteps[index] = isActive ? 1 : 0;
+    }
+
+    public GameObject GetAudioSourcePrefab()
+    {
+        return audioSourcePrefab;
+    }
+
+    public AudioClip GetDrumSample()
+    {
+        return drumSample;
+    }
+
 
     void SetupSteps()
     {
@@ -23,7 +51,7 @@ public class Channel : MonoBehaviour
             // If steps exist, just update their indices
             for (int i = 0; i < existingSteps.Length; i++)
             {
-                existingSteps[i].index = i + 1;
+                existingSteps[i].index = i ;
             }
         }
         else
@@ -51,7 +79,7 @@ public class Channel : MonoBehaviour
             StepManager stepManager = newStep.GetComponent<StepManager>();
             if (stepManager != null)
             {
-                stepManager.index = i + 1;
+                stepManager.index = i ;
             }
         }
     }

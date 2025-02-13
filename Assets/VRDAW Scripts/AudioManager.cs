@@ -2,21 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable] // Allows this class to be editable in the Unity Inspector
-public class Sound
-{
-    public string name;
-    public int[] steps = new int[16]; // 16-step sequence (0 = off, 1 = on)
-    public AudioClip clip; // The actual sound file
-}
-
 public class AudioManager : MonoBehaviour
 {
-    public List<Sound> sounds = new List<Sound>(); // List of all sounds (Kick, Snare, etc.)
-    public GameObject soundPrefab; // Prefab that contains an AudioSource
-    public Transform spawnPoint; // Where sounds are instantiated
-    public int bpm = 120;
+    public List<Channel> channels = new List<Channel>(); // Reference to all Channels
+    public Transform spawnPoint;
 
+    public int bpm = 120;
     private float stepDuration;
     private int currentStep = 0;
 
@@ -30,11 +21,11 @@ public class AudioManager : MonoBehaviour
     {
         while (true)
         {
-            foreach (var sound in sounds)
+            foreach (var channel in channels)
             {
-                if (sound.steps[currentStep] == 1) // If this step is active
+                if (channel.activeSteps[currentStep] == 1)
                 {
-                    PlaySound(sound.clip);
+                    PlaySound(channel);
                 }
             }
 
@@ -43,10 +34,16 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    void PlaySound(AudioClip clip)
+    private void PlaySound(Channel channel)
     {
-        GameObject soundObject = Instantiate(soundPrefab, spawnPoint.position, Quaternion.identity);
-        SampleManager sampleManager = soundObject.GetComponent<SampleManager>();
-        sampleManager.PlaySound(clip);
+        GameObject audioObject = Instantiate(channel.GetAudioSourcePrefab(), spawnPoint.position, Quaternion.identity);
+        AudioSource audioSource = audioObject.GetComponent<AudioSource>();
+
+        if (audioSource != null)
+        {
+            audioSource.clip = channel.GetDrumSample();
+            audioSource.Play();
+            Destroy(audioObject, audioSource.clip.length);
+        }
     }
 }

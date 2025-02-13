@@ -7,12 +7,12 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class Step : MonoBehaviour
 {
-    public bool isActive = false;  // Is the step ON or OFF?
+    public bool isActive = false;
     private StepManager stepManager;
     private XRBaseInteractable interactible;
 
-    [SerializeField] private GameObject visualObject;  // Assign this in the prefab
-    [SerializeField] private Material baseMaterial;    // Assign a base material in Unity Inspector
+    [SerializeField] private GameObject visualObject;
+    [SerializeField] private Material baseMaterial;
 
     private Renderer visualRenderer;
     private Material stepMaterial;
@@ -29,29 +29,27 @@ public class Step : MonoBehaviour
 
             if (visualRenderer != null)
             {
-                // Create a unique material instance for this step using the base material
                 if (baseMaterial != null)
                 {
                     stepMaterial = new Material(baseMaterial);
                     visualRenderer.material = stepMaterial;
-                    Debug.Log($"{gameObject.name}: Unique material assigned.");
                 }
                 else
                 {
-                    Debug.LogError($"{gameObject.name}: Base material is missing! Assign one in the Inspector.");
+                    Debug.LogError($"{gameObject.name}: Base material is missing!");
                 }
             }
             else
             {
-                Debug.LogError($"{gameObject.name}: No Renderer found on Visual Object!", visualObject);
+                Debug.LogError($"{gameObject.name}: No Renderer found on Visual Object!");
             }
         }
         else
         {
-            Debug.LogError($"{gameObject.name}: Visual Object is NOT assigned!", gameObject);
+            Debug.LogError($"{gameObject.name}: Visual Object is NOT assigned!");
         }
 
-        UpdateStepColor();  // Initialize the color
+        UpdateStepColor();
     }
 
     public void ToggleStep(BaseInteractionEventArgs hover)
@@ -59,9 +57,8 @@ public class Step : MonoBehaviour
         if (hover.interactorObject is XRPokeInteractor)
         {
             isActive = !isActive;
-            stepManager.isToggled = isActive;
+            stepManager.ToggleStep(isActive);
 
-            Debug.Log($"{gameObject.name}: Toggled to {(isActive ? "ON" : "OFF")}");
             UpdateStepColor();
         }
     }
@@ -71,11 +68,6 @@ public class Step : MonoBehaviour
         if (stepMaterial != null)
         {
             stepMaterial.color = isActive ? Color.green : Color.red;
-            Debug.Log($"{gameObject.name}: Color changed to {(isActive ? "Green" : "Red")}");
-        }
-        else
-        {
-            Debug.LogError($"{gameObject.name}: stepMaterial is NULL!");
         }
     }
 }
