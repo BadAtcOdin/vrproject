@@ -24,9 +24,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2159688571083933900}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.11142858, y: 0.520918, z: 0.52156496}
-  m_LocalScale: {x: 0.1904762, y: 1, z: 1}
+  m_LocalScale: {x: 0.1904762, y: 1, z: 0.6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -47,3 +47,8 @@ MonoBehaviour:
   stepPrefab: {fileID: 6422734213071981117, guid: a5ec3c6f7dcc5594dbb0a862f099afe3, type: 3}
   stepCount: 16
   stepSpacing: 0.25
+  channelName: kick
+  steps: []
+  activeSteps: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  audioSourcePrefab: {fileID: 0}
+  drumSample: {fileID: 0}

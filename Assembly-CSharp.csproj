@@ -65,6 +65,13 @@
     <Compile Include="Assets\VRDAW Scripts\AudioManager.cs" />
     <Compile Include="Assets\VRDAW Scripts\KeyHandler.cs" />
     <Compile Include="Assets\VRDAW Scripts\Channel.cs" />
+    <Compile Include="Assets\VRDAW Scripts\PlayPauseButton.cs" />
+    <Compile Include="Assets\VRDAW Scripts\BPMSlider.cs" />
+    <Compile Include="Assets\VRDAW Scripts\ChannelManager.cs" />
+    <Compile Include="Assets\VRDAW Scripts\ChannelCreationUI.cs" />
+    <Compile Include="Assets\VRDAW Scripts\NextSampleButton.cs" />
+    <Compile Include="Assets\VRDAW Scripts\CreateChannelButton.cs" />
+    <Compile Include="Assets\VRDAW Scripts\PreviousSampleButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

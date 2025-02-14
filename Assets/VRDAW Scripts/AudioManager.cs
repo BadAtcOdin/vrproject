@@ -17,6 +17,10 @@ public class AudioManager : MonoBehaviour
     private const double SCHEDULE_AHEAD_TIME = 0.1; // Schedule audio 100ms ahead
     private const double UPDATE_RATE = 0.03; // Update scheduling every 30ms
 
+    private bool isPlaying = false;
+    private Coroutine schedulingCoroutine;
+
+
     void Start()
     {
         sampleRate = AudioSettings.outputSampleRate;
@@ -27,9 +31,8 @@ public class AudioManager : MonoBehaviour
 
     IEnumerator ScheduleSteps()
     {
-        while (true)
+        while (isPlaying) // Add this condition
         {
-            // Schedule audio events until the ahead time boundary
             double currentTime = AudioSettings.dspTime;
             while (nextStepTime < currentTime + SCHEDULE_AHEAD_TIME)
             {
@@ -99,4 +102,66 @@ public class AudioManager : MonoBehaviour
             activeAudioObjects.Remove(channel);
         }
     }
+    
+
+    public void SetPlaybackState(bool shouldPlay)
+    {
+        isPlaying = shouldPlay;
+
+        if (isPlaying)
+        {
+            // Start playback
+            if (schedulingCoroutine == null)
+            {
+                nextStepTime = AudioSettings.dspTime + 0.1; // Start slightly in the future
+                schedulingCoroutine = StartCoroutine(ScheduleSteps());
+            }
+        }
+        else
+        {
+            // Stop playback
+            if (schedulingCoroutine != null)
+            {
+                StopCoroutine(schedulingCoroutine);
+                schedulingCoroutine = null;
+                StopAllActiveSounds();
+            }
+        }
+    }
+
+    private void StopAllActiveSounds()
+    {
+        foreach (var audioObject in activeAudioObjects.Values)
+        {
+            if (audioObject != null)
+            {
+                AudioSource source = audioObject.GetComponent<AudioSource>();
+                if (source != null)
+                {
+                    source.Stop();
+                }
+                Destroy(audioObject);
+            }
+        }
+        activeAudioObjects.Clear();
+    }
+
+    public void SetBPM(int newBPM)
+    {
+        bpm = newBPM;
+        // Recalculate step duration
+        stepDuration = 60.0 / bpm / 4;
+
+        // If we're currently playing, we need to adjust the next step time
+        // to maintain timing consistency
+        if (isPlaying)
+        {
+            double currentTime = AudioSettings.dspTime;
+            double timeSinceLastStep = currentTime - (nextStepTime - stepDuration);
+            double stepsElapsed = timeSinceLastStep / stepDuration;
+            nextStepTime = currentTime + (1.0 - (stepsElapsed - Mathf.Floor((float)stepsElapsed))) * stepDuration;
+        }
+    }
+
+
 }
