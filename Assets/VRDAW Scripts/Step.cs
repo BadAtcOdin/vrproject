@@ -1,28 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
+
 public class Step : MonoBehaviour
 {
-    public int stepIndex; // Step position (1-16)
-    public bool isActive = false; // Is the pad ON or OFF?
-    
-    private Renderer rend; 
+    public bool isActive = false;
+    private StepManager stepManager;
+    private XRBaseInteractable interactible;
+
+    [SerializeField] private GameObject visualObject;
+    [SerializeField] private Material baseMaterial;
+
+    private Renderer visualRenderer;
+    private Material stepMaterial;
 
     void Start()
     {
-        rend = GetComponent<Renderer>();
-        UpdateVisual();
+        interactible = GetComponent<XRBaseInteractable>();
+        interactible.hoverEntered.AddListener(ToggleStep);
+        stepManager = GetComponentInParent<StepManager>();
+
+        if (visualObject != null)
+        {
+            visualRenderer = visualObject.GetComponent<Renderer>();
+
+            if (visualRenderer != null)
+            {
+                if (baseMaterial != null)
+                {
+                    stepMaterial = new Material(baseMaterial);
+                    visualRenderer.material = stepMaterial;
+                }
+                else
+                {
+                    Debug.LogError($"{gameObject.name}: Base material is missing!");
+                }
+            }
+            else
+            {
+                Debug.LogError($"{gameObject.name}: No Renderer found on Visual Object!");
+            }
+        }
+        else
+        {
+            Debug.LogError($"{gameObject.name}: Visual Object is NOT assigned!");
+        }
+
+        UpdateStepColor();
     }
 
-    void UpdateVisual()
+    public void ToggleStep(BaseInteractionEventArgs hover)
     {
-        // Change color based on activation state
-        rend.material.color = isActive ? Color.green : Color.red;
+        if (hover.interactorObject is XRPokeInteractor)
+        {
+            isActive = !isActive;
+            stepManager.ToggleStep(isActive);
+
+            UpdateStepColor();
+        }
     }
 
-    public void ToggleStep()
+    private void UpdateStepColor()
     {
-        isActive = !isActive;
-        UpdateVisual();
+        if (stepMaterial != null)
+        {
+            stepMaterial.color = isActive ? Color.green : Color.red;
+        }
     }
 }
