@@ -96,10 +96,13 @@ public class ChannelManager : MonoBehaviour
         nameDisplay.transform.localPosition = new Vector3(8, 0, -0.2f);
         nameDisplay.transform.localRotation = Quaternion.Euler(90, 0, 0);
 
+#if UNITY_EDITOR
+        // This code will only be executed in the editor
         var serializedObject = new UnityEditor.SerializedObject(channel);
         serializedObject.FindProperty("drumSample").objectReferenceValue = sampleData.audioClip;
         serializedObject.FindProperty("audioSourcePrefab").objectReferenceValue = sampleData.audioSourcePrefab;
         serializedObject.ApplyModifiedProperties();
+#endif
     }
 
     public void RemoveChannel(Channel channel)
@@ -144,3 +147,4 @@ public class ChannelManager : MonoBehaviour
         }
     }
 }
+
